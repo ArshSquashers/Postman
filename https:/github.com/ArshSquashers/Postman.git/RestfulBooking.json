@@ -118,6 +118,14 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"in": "header",
+						"value": "asdf",
+						"key": "api_key"
+					}
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
