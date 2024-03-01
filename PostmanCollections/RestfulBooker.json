@@ -1,0 +1,505 @@
+{
+	"info": {
+		"_postman_id": "f5968875-9585-4a4c-8e48-a4ca02686e63",
+		"name": "Restful Booker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetBookingIds",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "25c8b941-a794-4bb1-802a-5aaf64680fd7"
+					}
+				}
+			],
+			"id": "1fc205b9-5697-48e1-a001-f5a1ff33d4e8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"",
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"const bookingId = response.bookingid;",
+							"",
+							"console.log(bookingId)",
+							"",
+							"pm.collectionVariables.set('createdBookingId', bookingId)",
+							"",
+							"const firstName = response.booking.firstname;",
+							"",
+							"console.log(firstName)",
+							"",
+							"pm.collectionVariables.set('createdFirstName', firstName)",
+							"",
+							"var responseschema = {",
+							"    'type': 'object',",
+							"    'properties': {",
+							"        'bookingid': { 'type': 'integer' },",
+							"        'booking': {",
+							"            'type': 'object',",
+							"            'properties': {",
+							"                'firstname': { 'type': 'string' },",
+							"                'lastname': { 'type': 'string' },",
+							"                'totalprice': { 'type': 'integer' },",
+							"                'depositpaid': { 'type': 'boolean' },",
+							"                'bookingdates': {",
+							"                    'type': 'object',",
+							"                    'properties': {",
+							"                        'checkin': { 'type': 'string' },",
+							"                        'checkout': { 'type': 'string' }",
+							"                    },",
+							"                    'required': [",
+							"                        'checkin',",
+							"                        'checkout'",
+							"                    ]",
+							"                },",
+							"                'additionalneeds': { 'type': 'string' }",
+							"            },",
+							"            'required': [",
+							"                'firstname',",
+							"                'lastname',",
+							"                'totalprice',",
+							"                'depositpaid',",
+							"                'bookingdates',",
+							"                'additionalneeds'",
+							"            ]",
+							"        }",
+							"    },",
+							"    'required': [",
+							"        'bookingid',",
+							"        'booking'",
+							"    ]",
+							"};",
+							"",
+							"pm.test(\"Validate schema\", function () {",
+							"  pm.response.to.have.jsonSchema(responseschema);",
+							"});",
+							"",
+							"pm.test(\"Header validation\",()=> {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "d733914b-ba4b-4732-9669-37ec6312870b"
+					}
+				}
+			],
+			"id": "b993a6f0-2c83-431b-a486-e61401c9161e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Jim\",\n    \"lastname\" : \"Brown\",\n    \"totalprice\" : 111,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "8053e48f-5e1f-4cd9-a617-04f022284c54"
+					}
+				}
+			],
+			"id": "9f3bc57d-4892-4e87-8413-41fb86428519",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/booking/{{createdBookingId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// const response = pm.response.json();",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// const bookingId = response.bookingid;",
+							"",
+							"// console.log(bookingId);",
+							"// pm.collectionVariables.set(\"createdBookingId\",bookingId);",
+							"",
+							"// const firstName = response.booking.firstname;",
+							"// console.log(firstName);",
+							"// pm.collectionVariables.set(\"createdFirstName\",firstName);",
+							""
+						],
+						"type": "text/javascript",
+						"id": "8e12918e-f322-42fa-adac-dc8b3ed5d50a"
+					}
+				}
+			],
+			"id": "d59bd2ea-8112-4300-ad86-3c1a797bb805",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token=6f4896e2388c306",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Anjali\",\n    \"lastname\" : \"Brown\",\n    \"totalprice\" : 111,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/booking/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"id": "2d9dd320-fcfe-4bc1-9611-e4326a93fcfa",
+							"key": "id",
+							"value": "{{createdBookingId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// const response = pm.response.json();",
+							"",
+							"// const bookingId = response.bookingid;",
+							"",
+							"// console.log(bookingId);",
+							"// pm.collectionVariables.set(\"createdBookingId\",bookingId);",
+							"",
+							"// const firstName = response.booking.firstname;",
+							"// console.log(firstName);",
+							"// pm.collectionVariables.set(\"createdFirstName\",firstName);",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"id": "288aae44-0e8c-4267-a9be-393d6a731ee2"
+					}
+				}
+			],
+			"id": "cdfa398d-c67a-427b-b45e-bbdf3a623d90",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token=6f4896e2388c306",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Anjali\",\n    \"totalprice\" : 111\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/booking/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"id": "9270bce3-4a48-4f45-8672-efc8aff8684c",
+							"key": "id",
+							"value": "{{createdBookingId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// const response = pm.response.json();",
+							"",
+							"// const bookingId = response.bookingid;",
+							"",
+							"// console.log(bookingId);",
+							"// pm.collectionVariables.set(\"createdBookingId\",bookingId);",
+							"",
+							"// const firstName = response.booking.firstname;",
+							"// console.log(firstName);",
+							"// pm.collectionVariables.set(\"createdFirstName\",firstName);",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"id": "29db30ab-4cd3-4bc7-9fed-ab010bb2d8d1"
+					}
+				}
+			],
+			"id": "2ccbdddf-ef9d-4423-8761-db6c1d60249f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token=6f4896e2388c306",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Anjali\",\n    \"lastname\" : \"Brown\",\n    \"totalprice\" : 11,\n    \"depositpaid\" : false,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/booking/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"booking",
+						":id"
+					],
+					"variable": [
+						{
+							"id": "b2f0150a-6946-48d2-92a2-abf0135b98df",
+							"key": "id",
+							"value": "{{createdBookingId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "88cf6b7e-3685-49a7-8bca-30463ceb6dea"
+					}
+				}
+			],
+			"id": "bd208746-8390-48c2-86e3-d83d32368028",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/ping"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "e63ae137-5e5d-4c48-8bf0-ecfd84f433ba"
+					}
+				}
+			],
+			"id": "1e391c06-3c6b-46bc-ae7e-ba0b05529367",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{accessToken}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/auth"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "d3fcee06-e6e5-4068-a02e-2fac52cb31e6"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "4be21d62-8f28-4cdf-9dcd-4e7b79161c2e"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://restful-booker.herokuapp.com",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "6f4896e2388c306",
+			"type": "string"
+		},
+		{
+			"key": "createdBookingId",
+			"value": ""
+		},
+		{
+			"key": "createdFirstName",
+			"value": ""
+		}
+	]
+}
